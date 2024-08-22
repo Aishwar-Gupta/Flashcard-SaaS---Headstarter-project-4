@@ -2,10 +2,11 @@
 
 import { useUser } from "@clerk/nextjs"
 import { Box, Button, Card, CardActionArea, CardContent, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TextField, Typography } from "@mui/material"
-import { collection, getDoc, writeBatch } from "firebase/firestore"
+import { collection, doc, setDoc, getDoc, writeBatch } from "firebase/firestore"
 // import { transform } from "next/dist/build/swc"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { db } from "@/firebase"
 
 export default function Generate() {
     const {isLoaded, isSignedIn, user} = useUser()
@@ -22,12 +23,12 @@ export default function Generate() {
             return
         }
         try {
-        const response = await fetch('/api/generate', {
-            method: 'POST',
-            body: text,
-        }).then((res) => res.json())
-        .then((data) => setFlashcards(data))
-    
+            const response = await fetch("api/generate", {
+                method: 'POST',
+                body: text,
+            }).then((res) => res.json())
+            .then((data) => setFlashcards(data))
+        
         if (!response.ok) {
             throw new Error('Failed to generate flashcards')
         }
